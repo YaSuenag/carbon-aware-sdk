@@ -72,26 +72,8 @@ jobs:
           npm install -g @openapitools/openapi-generator-cli@2.5.2
       - name: Generate client library
         run: |
-          echo 'inputSpec: http://localhost:8080/api/v1/swagger.yaml' > batch.yaml
-          echo 'generatorName: java' >> batch.yaml
-          echo 'outputDir: work' >> batch.yaml
-          echo 'additionalProperties:' >> batch.yaml
-          echo '  apiPackage: foudation.greensoftware.carbonaware.webapi.client' >> batch.yaml
-          echo '  artifactDescription: "Carbon Aware SDK client library for Java"' >> batch.yaml
-          echo '  artifactId: casdk-client' >> batch.yaml
-          echo "  artifactVersion: ${{ github.ref_name }}" >> batch.yaml
-          echo '  developerOrganization: Green Software Foundation' >> batch.yaml
-          echo '  developerOrganizationUrl: https://greensoftware.foundation/' >> batch.yaml
-          echo '  groupId: foundation.greensoftware' >> batch.yaml
-          echo '  licenseName: MIT License' >> batch.yaml
-          echo '  scmUrl: https://github.com/Green-Software-Foundation/carbon-aware-sdk' >> batch.yaml
-          echo '  artifactUrl: https://github.com/YaSuenag/carbon-aware-sdk/packages/' >> batch.yaml
-          echo '  scmConnection: https://github.com/Green-Software-Foundation/carbon-aware-sdk.git' >> batch.yaml
-          echo '  scmDeveloperConnection: https://github.com/Green-Software-Foundation/carbon-aware-sdk.git' >> batch.yaml
-          echo '  licenseUrl: https://opensource.org/license/mit/' >> batch.yaml
-          echo '  developerName: Green Software Foundation' >> batch.yaml
-          echo '  developerEmail: ~' >> batch.yaml
-          openapi-generator-cli batch batch.yaml
+          echo '{"inputSpec": "http://localhost:8080/api/v1/swagger.yaml", "generatorName": "java", "outputDir": "work", "additionalProperties": {"apiPackage": "foudation.greensoftware.carbonaware.webapi.client", "artifactDescription": "Carbon Aware SDK client library for Java", "artifactId": "casdk-client", "artifactVersion": "${{ github.ref_name }}", "developerOrganization": "Green Software Foundation", "developerOrganizationUrl": "https://greensoftware.foundation/", "groupId": "foundation.greensoftware", "licenseName": "MIT License", "scmUrl": "https://github.com/Green-Software-Foundation/carbon-aware-sdk", "artifactUrl": "https://github.com/YaSuenag/carbon-aware-sdk/packages/", "scmConnection": "https://github.com/Green-Software-Foundation/carbon-aware-sdk.git", "scmDeveloperConnection": "https://github.com/Green-Software-Foundation/carbon-aware-sdk.git", "licenseUrl": "https://opensource.org/license/mit/", "developerName": "Green Software Foundation", "developerEmail": null}}' > config.json
+          openapi-generator-cli generate -i http://localhost:8080/api/v1/swagger.yaml -g java -o work -c config.json
           sed -i "s|</project>|<distributionManagement><repository><id>github</id><name>GitHub Packages</name><url>https://maven.pkg.github.com/YaSuenag/carbon-aware-sdk</url></repository></distributionManagement></project>|" work/pom.xml
         shell: bash
       - name: Setup Java 8
