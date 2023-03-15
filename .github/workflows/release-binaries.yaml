@@ -90,7 +90,7 @@ jobs:
           echo '  scmDeveloperConnection: https://github.com/Green-Software-Foundation/carbon-aware-sdk.git' >> batch.yaml
           echo '  licenseUrl: https://opensource.org/license/mit/' >> batch.yaml
           echo '  developerName: Green Software Foundation' >> batch.yaml
-          echo '  developerEmail:' >> batch.yaml
+          echo '  developerEmail: ~' >> batch.yaml
           openapi-generator-cli batch batch.yaml
           sed -i "s|</project>|<distributionManagement><repository><id>github</id><name>GitHub Packages</name><url>https://maven.pkg.github.com/YaSuenag/carbon-aware-sdk</url></repository></distributionManagement></project>|" work/pom.xml
         shell: bash
