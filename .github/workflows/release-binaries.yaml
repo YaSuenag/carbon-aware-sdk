@@ -3,7 +3,7 @@ name: Publish release binaries
 on:
   # push event is for debugging
   push:
-    branches: [gha-container]
+    branches: [gha-container, gha-java-client]
   release:
     types: [created]
   workflow_dispatch:
@@ -11,9 +11,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-
-permissions:
-  contents: read
 
 concurrency:
   group: publish
@@ -25,11 +22,6 @@ jobs:
     permissions:
       packages: write
     steps:
-      - name: Extract release tag
-        run: |
-          TAG=$(echo ${{ github.ref }} | cut -d '/' -f 3)
-          echo "TAG=$TAG" >> $GITHUB_ENV
-        shell: bash
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -46,7 +38,7 @@ jobs:
         with:
           tags: |
             type=raw,value=latest
-            type=raw,value=${{ env.TAG }}
+            type=raw,value=${{ github.ref_name }}
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
@@ -58,3 +50,61 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
+
+  upload-openapi-spec:
+    needs: publish-container-image
+    runs-on: ubuntu-latest
+    services:
+      casdk:
+        #image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        image: ghcr.io/yasuenag/carbon-aware-sdk:${{ github.ref_name }}
+        ports:
+          - 8080:80
+    steps:
+      - name: Download OpenAPI spec
+        run: wget http://localhost:8080/api/v1/swagger.yaml
+      - name: Upload OpenAPI spec
+        uses: actions/upload-artifact@v3
+        with:
+          name: spec-artifact
+          path: swagger.yaml
+
+  publish-java-client:
+    needs: upload-openapi-spec
+    permissions:
+      packages: write
+    uses: ./.github/workflows/java-client.yaml
+    with:
+      version: ${{ github.ref_name }}
+
+  upload-pages:
+    needs: [publish-java-client]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare
+        run: mkdir -p pages/client
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Download Javadoc
+        uses: actions/download-artifact@v3
+        with:
+          name: javadoc
+          path: pages/client
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: pages
+
+  publish-pages:
+    needs: upload-pages
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
