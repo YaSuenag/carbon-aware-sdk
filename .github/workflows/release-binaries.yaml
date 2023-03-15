@@ -61,7 +61,8 @@ jobs:
       packages: write
     services:
       casdk:
-        image: "ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
+        #image: "ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
+        image: "ghcr.io/yasuenag/carbon-aware-sdk:${{ github.ref_name }}"
         ports:
           - 8080:80
     steps:
