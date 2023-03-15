@@ -93,8 +93,8 @@ jobs:
         uses: actions/configure-pages@v2
       - name: Prepare to upload Javadoc
         run: |
-          mkdir pages/clients
-          mv work/target/apidocs pages/clients/javadoc
+          mkdir -p pages/clients/java
+          mv work/target/apidocs pages/clients/java/${{ github.ref_name }}
         shell: bash
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
