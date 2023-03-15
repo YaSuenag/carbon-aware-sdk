@@ -98,7 +98,7 @@ jobs:
         with:
           path: target/apidocs
 
-  publish-java-client:
+  publish-javadoc:
     needs: publish-java-client
     runs-on: ubuntu-latest
     permissions:
