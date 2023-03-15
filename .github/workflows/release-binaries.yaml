@@ -69,7 +69,7 @@ jobs:
       - name: Prepare
         run: |
           mkdir work pages
-          npm install @openapitools/openapi-generator-cli@2.5.2
+          npm install -g @openapitools/openapi-generator-cli@2.5.2
       - name: Generate client library
         run: |
           openapi-generator-cli generate -i http://localhost:8080/api/v1/swagger.yaml -g java -o work --additional-properties apiPackage=foudation.greensoftware.carbonaware.webapi.client,artifactDescription="Carbon Aware SDK client library for Java",artifactId=casdk-client,artifactVersion=v1.0.0,developerOrganization="Green Software Foundation",developerOrganizationUrl=https://greensoftware.foundation/,groupId=foundation.greensoftware,licenseName="MIT License",scmUrl=https://github.com/Green-Software-Foundation/carbon-aware-sdk,artifactUrl=https://github.com/YaSuenag/carbon-aware-sdk/packages/,scmConnection=https://github.com/Green-Software-Foundation/carbon-aware-sdk.git,scmDeveloperConnection=https://github.com/Green-Software-Foundation/carbon-aware-sdk.git,licenseUrl=https://opensource.org/license/mit/,developerName="Green Software Foundation",developerEmail=""
