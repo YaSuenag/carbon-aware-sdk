@@ -97,7 +97,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: target/apidocs
+          path: apidocs
 
   publish-javadoc:
     needs: publish-java-client
