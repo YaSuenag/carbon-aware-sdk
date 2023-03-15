@@ -94,10 +94,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Setup Pages
         uses: actions/configure-pages@v2
+      - name: Prepare to upload Javadoc
+        run: |
+          mkdir -p pages/clients/
+          mv work/target/apidocs pages/clients/javadoc
+        shell: bash
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: apidocs
+          path: pages
 
   publish-javadoc:
     needs: publish-java-client
