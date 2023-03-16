@@ -54,7 +54,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
 
-  publish-java-client:
+  publish-client-libraries:
     needs: publish-container-image
     runs-on: ubuntu-latest
     permissions:
@@ -84,8 +84,8 @@ jobs:
         with:
           path: pages
 
-  publish-javadoc:
-    needs: publish-java-client
+  publish-pages:
+    needs: publish-client-libraries
     runs-on: ubuntu-latest
     permissions:
       pages: write
