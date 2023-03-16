@@ -12,9 +12,6 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
-permissions:
-  contents: read
-
 concurrency:
   group: publish
   cancel-in-progress: true
@@ -54,40 +51,50 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           provenance: false
 
-  publish-client-libraries:
+  upload-openapi-spec:
     needs: publish-container-image
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
     services:
       casdk:
-        #image: "ghcr.io/${{ github.repository }}:${{ github.ref_name }}"
-        image: "ghcr.io/yasuenag/carbon-aware-sdk:${{ github.ref_name }}"
+        #image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        image: ghcr.io/yasuenag/carbon-aware-sdk:${{ github.ref_name }}
         ports:
           - 8080:80
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Download OpenAPI spec
+        run: wget http://localhost:8080/api/v1/swagger.yaml
+      - name: Upload OpenAPI spec
+        uses: actions/upload-artifact@v3
+        with:
+          name: spec-artifact
+          path: swagger.yaml
+
+  generate-java-client:
+    needs: upload-openapi-spec
+    uses: ./.github/workflows/client-generation/java.yaml
+    with:
+      version: ${{ github.ref_name }}
+
+  upload-pages:
+    needs: [publish-java-client]
+    runs-on: ubuntu-latest
+    steps:
       - name: Prepare
-        run: |
-          mkdir work pages
-          npm install -g @openapitools/openapi-generator-cli@2.5.2
+        run: mkdir -p pages/client
       - name: Setup Pages
         uses: actions/configure-pages@v2
-      - name: Generate Java client
-        uses: ./.github/workflows/client-generation/java
+      - name: Download Javadoc
+        uses: actions/download-artifact@v3
         with:
-          version: ${{ github.ref_name }}
-          spec: http://localhost:8080/api/v1/swagger.yaml
-          workdir: work
-          pagedir: pages
+          name: javadoc
+          path: pages/client
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           path: pages
 
   publish-pages:
-    needs: publish-client-libraries
+    needs: upload-pages
     runs-on: ubuntu-latest
     permissions:
       pages: write
