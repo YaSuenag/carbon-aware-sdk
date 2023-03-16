@@ -83,7 +83,8 @@ jobs:
       packages: write
     uses: ./.github/workflows/js-client.yaml
     with:
-      version: ${{ github.ref_name }}
+      #version: ${{ github.ref_name }}
+      version: v1.0.0
 
   upload-pages:
     needs: [publish-java-client, publish-js-client]
