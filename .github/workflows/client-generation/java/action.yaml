@@ -27,9 +27,11 @@ runs:
     - name: Run Maven
       run: mvn -B -Dmaven.test.skip=true package javadoc:javadoc
       working-directory: ${{ inputs.workdir }}
+      shell: bash
     - name: Publish to GitHub Packages via Maven
       run: mvn deploy
       working-directory: ${{ inputs.workdir }}
+      shell: bash
     - name: Prepare to upload Javadoc
       run: |
         mkdir -p ${{ inputs.pagedir }}/clients/java
