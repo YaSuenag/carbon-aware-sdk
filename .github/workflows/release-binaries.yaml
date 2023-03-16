@@ -71,6 +71,8 @@ jobs:
 
   publish-java-client:
     needs: upload-openapi-spec
+    permissions:
+      packages: write
     uses: ./.github/workflows/java-client.yaml
     with:
       version: ${{ github.ref_name }}
