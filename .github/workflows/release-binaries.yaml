@@ -3,7 +3,7 @@ name: Publish release binaries
 on:
   # push event is for debugging
   push:
-    branches: [gha-container, gha-java-client]
+    branches: [gha-container, gha-java-client, yasuenag-gha-js-client]
   release:
     types: [created]
   workflow_dispatch:
