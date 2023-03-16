@@ -69,7 +69,7 @@ jobs:
           name: spec-artifact
           path: swagger.yaml
 
-  generate-java-client:
+  publish-java-client:
     needs: upload-openapi-spec
     uses: ./.github/workflows/java-client.yaml
     with:
