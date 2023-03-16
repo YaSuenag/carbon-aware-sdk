@@ -1,0 +1,37 @@
+name: Generate Java client
+
+inputs:
+  version:
+    required: true
+  spec:
+    required: true
+  workdir:
+    required: true
+  pagedir:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Generate Java client library
+      run: |
+        echo '{"apiPackage": "foudation.greensoftware.carbonaware.webapi.client", "artifactDescription": "Carbon Aware SDK client library for Java", "artifactId": "casdk-client", "artifactVersion": "${{ inputs.version }}", "developerOrganization": "Green Software Foundation", "developerOrganizationUrl": "https://greensoftware.foundation/", "groupId": "foundation.greensoftware", "licenseName": "MIT License", "scmUrl": "https://github.com/Green-Software-Foundation/carbon-aware-sdk", "artifactUrl": "https://github.com/YaSuenag/carbon-aware-sdk/packages/", "scmConnection": "https://github.com/Green-Software-Foundation/carbon-aware-sdk.git", "scmDeveloperConnection": "https://github.com/Green-Software-Foundation/carbon-aware-sdk.git", "licenseUrl": "https://opensource.org/license/mit/", "developerName": "Green Software Foundation", "developerEmail": null}' > config.json
+        openapi-generator-cli generate -i ${{ inputs.spec }} -g java -o ${{ inputs.workdir }} -c config.json
+        sed -i "s|</project>|<distributionManagement><repository><id>github</id><name>GitHub Packages</name><url>https://maven.pkg.github.com/YaSuenag/carbon-aware-sdk</url></repository></distributionManagement></project>|" ${{ inputs.workdir }}/pom.xml
+      shell: bash
+    - name: Setup Java 8
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 8
+    - name: Run Maven
+      run: mvn -B -Dmaven.test.skip=true package javadoc:javadoc
+      working-directory: ${{ inputs.workdir }}
+    - name: Publish to GitHub Packages via Maven
+      run: mvn deploy
+      working-directory: ${{ inputs.workdir }}
+    - name: Prepare to upload Javadoc
+      run: |
+        mkdir -p ${{ inputs.pagedir }}/clients/java
+        mv ${{ inputs.workdir }}/target/apidocs ${{ inputs.pagedir }}/clients/java/${{ inputs.version }}
+      shell: bash
