@@ -1,0 +1,61 @@
+name: Generate JavaScript client
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      spec-artifact:
+        required: false
+        type: string
+        default: spec-artifact
+      spec-filename:
+        required: false
+        type: string
+        default: swagger.yaml
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Prepare
+        run: |
+          mkdir work pages
+          npm install -g @openapitools/openapi-generator-cli@2.5.2
+      - name: Download OpenAPI spec
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.spec-artifact }}
+      - name: Generate client library
+        run: |
+          echo '{"apiPackage": "casdk", "projectDescription": "Carbon Aware SDK client library for JavaScript", "projectName": "@${{ github.repository }}", "projectVersion": "${{ inputs.version }}", "licenseName": "MIT license"}' > config.json
+          openapi-generator-cli generate -i ${{ inputs.spec-filename }} -g javascript -o work -c config.json
+          sed -i 's|^}$|,"publishConfig": {"registry": "https://npm.pkg.github.com"}}|' work/package.json
+        shell: bash
+      - name: Setup Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com
+      - name: Run install
+        run: npm install
+        working-directory: work
+      - name: Publish to GitHub Packages via npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        working-directory: work
+      - name: Prepare to upload API documents
+        run: |
+          mkdir -p pages/js/${{ inputs.version }}
+          mv work/README.md pages/js/${{ inputs.version }}
+          mv work/docs pages/js/${{ inputs.version }}/
+        shell: bash
+      - name: Upload documents
+        uses: actions/upload-artifact@v3
+        with:
+          name: js-documents
+          path: pages

@@ -3,7 +3,7 @@ name: Publish release binaries
 on:
   # push event is for debugging
   push:
-    branches: [gha-container, gha-java-client]
+    branches: [gha-container, gha-java-client, gha-js-client]
   release:
     types: [created]
   workflow_dispatch:
@@ -77,8 +77,17 @@ jobs:
     with:
       version: ${{ github.ref_name }}
 
+  publish-js-client:
+    needs: upload-openapi-spec
+    permissions:
+      packages: write
+    uses: ./.github/workflows/js-client.yaml
+    with:
+      #version: ${{ github.ref_name }}
+      version: v1.0.0
+
   upload-pages:
-    needs: [publish-java-client]
+    needs: [publish-java-client, publish-js-client]
     runs-on: ubuntu-latest
     steps:
       - name: Prepare
@@ -89,6 +98,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: javadoc
+          path: pages/client
+      - name: Download JS documents
+        uses: actions/download-artifact@v3
+        with:
+          name: js-documents
           path: pages/client
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
