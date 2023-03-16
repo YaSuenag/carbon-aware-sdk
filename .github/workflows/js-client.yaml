@@ -31,7 +31,7 @@ jobs:
           name: ${{ inputs.spec-artifact }}
       - name: Generate client library
         run: |
-          echo '{"apiPackage": "casdk", "moduleName": "@${{ github.repository }}", "projectDescription": "Carbon Aware SDK client library for JavaScript", "projectName": "casdk-client", "projectVersion": "${{ inputs.version }}", "licenseName": "MIT license"}' > config.json
+          echo '{"apiPackage": "casdk", "projectDescription": "Carbon Aware SDK client library for JavaScript", "projectName": "@${{ github.repository }}", "projectVersion": "${{ inputs.version }}", "licenseName": "MIT license"}' > config.json
           openapi-generator-cli generate -i ${{ inputs.spec-filename }} -g javascript -o work -c config.json
           sed -i 's|^}$|,"publishConfig": {"registry": "https://npm.pkg.github.com"}}|' work/package.json
         shell: bash
