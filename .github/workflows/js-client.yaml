@@ -39,8 +39,8 @@ jobs:
         with:
           node-version: 16.x
           registry-url: https://npm.pkg.github.com
-      - name: Run ci
-        run: npm ci
+      - name: Run install
+        run: npm install
         working-directory: work
       - name: Publish to GitHub Packages via npm
         run: npm publish
