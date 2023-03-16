@@ -71,7 +71,7 @@ jobs:
 
   generate-java-client:
     needs: upload-openapi-spec
-    uses: ./.github/workflows/client-generation/java.yaml
+    uses: ./.github/workflows/java-client.yaml
     with:
       version: ${{ github.ref_name }}
 
