@@ -30,6 +30,8 @@ jobs:
         with:
           name: ${{ inputs.spec-artifact }}
       - name: Generate client library
+        # TODO: Update artifactUrl
+        # TODO: Update registry URL in sed
         run: |
           echo '{"apiPackage": "foudation.greensoftware.carbonaware.webapi.client", "artifactDescription": "Carbon Aware SDK client library for Java", "artifactId": "casdk-client", "artifactVersion": "${{ inputs.version }}", "developerOrganization": "Green Software Foundation", "developerOrganizationUrl": "https://greensoftware.foundation/", "groupId": "foundation.greensoftware", "licenseName": "MIT License", "scmUrl": "https://github.com/Green-Software-Foundation/carbon-aware-sdk", "artifactUrl": "https://github.com/YaSuenag/carbon-aware-sdk/packages/", "scmConnection": "https://github.com/Green-Software-Foundation/carbon-aware-sdk.git", "scmDeveloperConnection": "https://github.com/Green-Software-Foundation/carbon-aware-sdk.git", "licenseUrl": "https://opensource.org/license/mit/", "developerName": "Green Software Foundation", "developerEmail": null}' > config.json
           openapi-generator-cli generate -i ${{ inputs.spec-filename }} -g java -o work -c config.json

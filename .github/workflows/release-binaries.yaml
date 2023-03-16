@@ -1,9 +1,6 @@
 name: Publish release binaries
 
 on:
-  # push event is for debugging
-  push:
-    branches: [gha-container, gha-java-client, gha-js-client]
   release:
     types: [created]
   workflow_dispatch:
@@ -83,8 +80,7 @@ jobs:
       packages: write
     uses: ./.github/workflows/js-client.yaml
     with:
-      #version: ${{ github.ref_name }}
-      version: v1.0.0
+      version: ${{ github.ref_name }}
 
   upload-pages:
     needs: [publish-java-client, publish-js-client]
