@@ -33,7 +33,6 @@ jobs:
         run: |
           echo '{"apiPackage": "casdk", "moduleName": "@${{ github.repository }}", "projectDescription": "Carbon Aware SDK client library for JavaScript", "projectName": "casdk-client", "projectVersion": "${{ inputs.version }}", "licenseName": "MIT license"}' > config.json
           openapi-generator-cli generate -i ${{ inputs.spec-filename }} -g javascript -o work -c config.json
-          sed -i "s|</project>|<distributionManagement><repository><id>github</id><name>GitHub Packages</name><url>https://maven.pkg.github.com/YaSuenag/carbon-aware-sdk</url></repository></distributionManagement></project>|" work/pom.xml
         shell: bash
       - name: Setup Node.js 16
         uses: actions/setup-node@v3
