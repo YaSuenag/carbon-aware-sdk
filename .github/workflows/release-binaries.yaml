@@ -88,8 +88,6 @@ jobs:
     steps:
       - name: Prepare
         run: mkdir -p pages/client
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
       - name: Download Javadoc
         uses: actions/download-artifact@v3
         with:
@@ -112,7 +110,7 @@ jobs:
       pages: write
       id-token: write
     environment:
-      name: ${{ github.ref_name }}
+      name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
