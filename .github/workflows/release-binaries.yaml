@@ -82,37 +82,28 @@ jobs:
     with:
       version: ${{ github.ref_name }}
 
-  upload-pages:
+  upload-apidoc:
     needs: [publish-java-client, publish-js-client]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout doc-website branch
+        uses: actions/checkout@v3
+        with:
+          ref: doc-website
       - name: Prepare
-        run: mkdir -p pages/client
+        run: mkdir -p docs/apidocs/${{ github.ref_name }}
       - name: Download Javadoc
         uses: actions/download-artifact@v3
         with:
           name: javadoc
-          path: pages/client
+          path: docs/apidocs/${{ github.ref_name }}
       - name: Download JS documents
         uses: actions/download-artifact@v3
         with:
           name: js-documents
-          path: pages/client
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: pages
-
-  publish-pages:
-    needs: upload-pages
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          path: docs/apidocs/${{ github.ref_name }}
+      - name: Push documents
+        run: |
+          git add docs/apidocs/${{ github.ref_name }}
+          git commit -m "Add client API docs for ${{ github.ref_name }}"
+          git push origin doc-website
