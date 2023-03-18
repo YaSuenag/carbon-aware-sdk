@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>YaSuenagCarbonAwareSdk.LocationsApi | carbon-aware-sdk</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="YaSuenagCarbonAwareSdk.LocationsApi" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Carbon-Aware Core SDK" />
+<meta property="og:description" content="Carbon-Aware Core SDK" />
+<link rel="canonical" href="https://yasuenag.github.io/carbon-aware-sdk/docs/LocationsApi.html" />
+<meta property="og:url" content="https://yasuenag.github.io/carbon-aware-sdk/docs/LocationsApi.html" />
+<meta property="og:site_name" content="carbon-aware-sdk" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="YaSuenagCarbonAwareSdk.LocationsApi" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Carbon-Aware Core SDK","headline":"YaSuenagCarbonAwareSdk.LocationsApi","url":"https://yasuenag.github.io/carbon-aware-sdk/docs/LocationsApi.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/carbon-aware-sdk/assets/css/style.css?v=7d1b302f4e9cd0c1809b84e5caa6cf07484dcdc8">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/carbon-aware-sdk/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://yasuenag.github.io/carbon-aware-sdk/">carbon-aware-sdk</a></h1>
+      
+
+      <h1 id="yasuenagcarbonawaresdklocationsapi">YaSuenagCarbonAwareSdk.LocationsApi</h1>
+
+<p>All URIs are relative to <em>http://localhost</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>HTTP request</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/LocationsApi.html#getAllLocations"><strong>getAllLocations</strong></a></td>
+      <td><strong>GET</strong> /locations</td>
+      <td>Get all locations instances</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="getalllocations">getAllLocations</h2>
+
+<blockquote>
+  <p>{String: Location} getAllLocations()</p>
+</blockquote>
+
+<p>Get all locations instances</p>
+
+<h3 id="example">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">LocationsApi</span><span class="p">();</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">getAllLocations</span><span class="p">((</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters">Parameters</h3>
+
+<p>This endpoint does not need any parameter.</p>
+
+<h3 id="return-type">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/Location.html"><strong>{String: Location}</strong></a></p>
+
+<h3 id="authorization">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: Not defined</li>
+  <li><strong>Accept</strong>: application/json</li>
+</ul>
+
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>YaSuenagCarbonAwareSdk.CarbonAwareApi | carbon-aware-sdk</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="YaSuenagCarbonAwareSdk.CarbonAwareApi" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Carbon-Aware Core SDK" />
+<meta property="og:description" content="Carbon-Aware Core SDK" />
+<link rel="canonical" href="https://yasuenag.github.io/carbon-aware-sdk/docs/CarbonAwareApi.html" />
+<meta property="og:url" content="https://yasuenag.github.io/carbon-aware-sdk/docs/CarbonAwareApi.html" />
+<meta property="og:site_name" content="carbon-aware-sdk" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="YaSuenagCarbonAwareSdk.CarbonAwareApi" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Carbon-Aware Core SDK","headline":"YaSuenagCarbonAwareSdk.CarbonAwareApi","url":"https://yasuenag.github.io/carbon-aware-sdk/docs/CarbonAwareApi.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/carbon-aware-sdk/assets/css/style.css?v=7d1b302f4e9cd0c1809b84e5caa6cf07484dcdc8">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/carbon-aware-sdk/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://yasuenag.github.io/carbon-aware-sdk/">carbon-aware-sdk</a></h1>
+      
+
+      <h1 id="yasuenagcarbonawaresdkcarbonawareapi">YaSuenagCarbonAwareSdk.CarbonAwareApi</h1>
+
+<p>All URIs are relative to <em>http://localhost</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>HTTP request</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/CarbonAwareApi.html#batchForecastDataAsync"><strong>batchForecastDataAsync</strong></a></td>
+      <td><strong>POST</strong> /emissions/forecasts/batch</td>
+      <td>Given an array of historical forecasts, retrieves the data that contains  forecasts metadata, the optimal forecast and a range of forecasts filtered by the attributes [start…end] if provided.</td>
+    </tr>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/CarbonAwareApi.html#getAverageCarbonIntensity"><strong>getAverageCarbonIntensity</strong></a></td>
+      <td><strong>GET</strong> /emissions/average-carbon-intensity</td>
+      <td>Retrieves the measured carbon intensity data between the time boundaries and calculates the average carbon intensity during that period.</td>
+    </tr>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/CarbonAwareApi.html#getAverageCarbonIntensityBatch"><strong>getAverageCarbonIntensityBatch</strong></a></td>
+      <td><strong>POST</strong> /emissions/average-carbon-intensity/batch</td>
+      <td>Given an array of request objects, each with their own location and time boundaries, calculate the average carbon intensity for that location and time period   and return an array of carbon intensity objects.</td>
+    </tr>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/CarbonAwareApi.html#getBestEmissionsDataForLocationsByTime"><strong>getBestEmissionsDataForLocationsByTime</strong></a></td>
+      <td><strong>GET</strong> /emissions/bylocations/best</td>
+      <td>Calculate the best emission data by list of locations for a specified time period.</td>
+    </tr>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/CarbonAwareApi.html#getCurrentForecastData"><strong>getCurrentForecastData</strong></a></td>
+      <td><strong>GET</strong> /emissions/forecasts/current</td>
+      <td>Retrieves the most recent forecasted data and calculates the optimal marginal carbon intensity window.</td>
+    </tr>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/CarbonAwareApi.html#getEmissionsDataForLocationByTime"><strong>getEmissionsDataForLocationByTime</strong></a></td>
+      <td><strong>GET</strong> /emissions/bylocation</td>
+      <td>Calculate the best emission data by location for a specified time period.</td>
+    </tr>
+    <tr>
+      <td><a href="/carbon-aware-sdk/docs/CarbonAwareApi.html#getEmissionsDataForLocationsByTime"><strong>getEmissionsDataForLocationsByTime</strong></a></td>
+      <td><strong>GET</strong> /emissions/bylocations</td>
+      <td>Calculate the observed emission data by list of locations for a specified time period.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="batchforecastdataasync">batchForecastDataAsync</h2>
+
+<blockquote>
+  <p>[EmissionsForecastDTO] batchForecastDataAsync(opts)</p>
+</blockquote>
+
+<p>Given an array of historical forecasts, retrieves the data that contains  forecasts metadata, the optimal forecast and a range of forecasts filtered by the attributes [start…end] if provided.</p>
+
+<p>This endpoint takes a batch of requests for historical forecast data, fetches them, and calculates the optimal   marginal carbon intensity windows for each using the same parameters available to the '/emissions/forecasts/current'  endpoint.                This endpoint is useful for back-testing what one might have done in the past, if they had access to the   current forecast at the time.</p>
+
+<h3 id="example">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonAwareApi</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">emissionsForecastBatchParametersDTO</span><span class="dl">'</span><span class="p">:</span> <span class="p">[</span><span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">EmissionsForecastBatchParametersDTO</span><span class="p">()]</span> <span class="c1">// [EmissionsForecastBatchParametersDTO] | Array of requested forecasts.</span>
+<span class="p">};</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">batchForecastDataAsync</span><span class="p">(</span><span class="nx">opts</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>emissionsForecastBatchParametersDTO</strong></td>
+      <td><a href="/carbon-aware-sdk/docs/EmissionsForecastBatchParametersDTO.html"><strong>[EmissionsForecastBatchParametersDTO]</strong></a></td>
+      <td>Array of requested forecasts.</td>
+      <td>[optional]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="return-type">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/EmissionsForecastDTO.html"><strong>[EmissionsForecastDTO]</strong></a></p>
+
+<h3 id="authorization">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: application/json, text/json, application/*+json</li>
+  <li><strong>Accept</strong>: application/json, application/json; charset=utf-8</li>
+</ul>
+
+<h2 id="getaveragecarbonintensity">getAverageCarbonIntensity</h2>
+
+<blockquote>
+  <p>CarbonIntensityDTO getAverageCarbonIntensity(location, startTime, endTime)</p>
+</blockquote>
+
+<p>Retrieves the measured carbon intensity data between the time boundaries and calculates the average carbon intensity during that period.</p>
+
+<p>This endpoint is useful for reporting the measured carbon intensity for a specific time period in a specific location.</p>
+
+<h3 id="example-1">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonAwareApi</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">location</span> <span class="o">=</span> <span class="nx">eastus</span><span class="p">;</span> <span class="c1">// String | The location name where workflow is run</span>
+<span class="kd">let</span> <span class="nx">startTime</span> <span class="o">=</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="nx">T15</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span><span class="p">;</span> <span class="c1">// Date | The time at which the workflow we are measuring carbon intensity for started</span>
+<span class="kd">let</span> <span class="nx">endTime</span> <span class="o">=</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="nx">T18</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span><span class="p">;</span> <span class="c1">// Date | The time at which the workflow we are measuring carbon intensity for ended</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">getAverageCarbonIntensity</span><span class="p">(</span><span class="nx">location</span><span class="p">,</span> <span class="nx">startTime</span><span class="p">,</span> <span class="nx">endTime</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters-1">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>location</strong></td>
+      <td><strong>String</strong></td>
+      <td>The location name where workflow is run</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>startTime</strong></td>
+      <td><strong>Date</strong></td>
+      <td>The time at which the workflow we are measuring carbon intensity for started</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>endTime</strong></td>
+      <td><strong>Date</strong></td>
+      <td>The time at which the workflow we are measuring carbon intensity for ended</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="return-type-1">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/CarbonIntensityDTO.html"><strong>CarbonIntensityDTO</strong></a></p>
+
+<h3 id="authorization-1">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers-1">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: Not defined</li>
+  <li><strong>Accept</strong>: application/json, application/json; charset=utf-8</li>
+</ul>
+
+<h2 id="getaveragecarbonintensitybatch">getAverageCarbonIntensityBatch</h2>
+
+<blockquote>
+  <p>[CarbonIntensityDTO] getAverageCarbonIntensityBatch(opts)</p>
+</blockquote>
+
+<p>Given an array of request objects, each with their own location and time boundaries, calculate the average carbon intensity for that location and time period   and return an array of carbon intensity objects.</p>
+
+<p>The application only supports batching across a single location with different time boundaries. If multiple locations are provided, an error is returned.  For each item in the request array, the application returns a corresponding object containing the location, time boundaries, and average marginal carbon intensity.</p>
+
+<h3 id="example-2">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonAwareApi</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">carbonIntensityBatchParametersDTO</span><span class="dl">'</span><span class="p">:</span> <span class="p">[</span><span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonIntensityBatchParametersDTO</span><span class="p">()]</span> <span class="c1">// [CarbonIntensityBatchParametersDTO] | Array of inputs where each contains a \"location\", \"startDate\", and \"endDate\" for which to calculate average marginal carbon intensity.</span>
+<span class="p">};</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">getAverageCarbonIntensityBatch</span><span class="p">(</span><span class="nx">opts</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters-2">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>carbonIntensityBatchParametersDTO</strong></td>
+      <td><a href="/carbon-aware-sdk/docs/CarbonIntensityBatchParametersDTO.html"><strong>[CarbonIntensityBatchParametersDTO]</strong></a></td>
+      <td>Array of inputs where each contains a \"location\", \"startDate\", and \"endDate\" for which to calculate average marginal carbon intensity.</td>
+      <td>[optional]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="return-type-2">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/CarbonIntensityDTO.html"><strong>[CarbonIntensityDTO]</strong></a></p>
+
+<h3 id="authorization-2">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers-2">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: application/json, text/json, application/*+json</li>
+  <li><strong>Accept</strong>: application/json, application/json; charset=utf-8</li>
+</ul>
+
+<h2 id="getbestemissionsdataforlocationsbytime">getBestEmissionsDataForLocationsByTime</h2>
+
+<blockquote>
+  <p>[EmissionsData] getBestEmissionsDataForLocationsByTime(location, opts)</p>
+</blockquote>
+
+<p>Calculate the best emission data by list of locations for a specified time period.</p>
+
+<h3 id="example-3">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonAwareApi</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">location</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">null</span><span class="dl">"</span><span class="p">];</span> <span class="c1">// [String] | String array of named locations</span>
+<span class="kd">let</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">time</span><span class="dl">'</span><span class="p">:</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="na">T15</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span><span class="p">,</span> <span class="c1">// Date | [Optional] Start time for the data query.</span>
+  <span class="dl">'</span><span class="s1">toTime</span><span class="dl">'</span><span class="p">:</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="na">T18</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span> <span class="c1">// Date | [Optional] End time for the data query.</span>
+<span class="p">};</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">getBestEmissionsDataForLocationsByTime</span><span class="p">(</span><span class="nx">location</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters-3">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>location</strong></td>
+      <td><a href="String.md"><strong>[String]</strong></a></td>
+      <td>String array of named locations</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>time</strong></td>
+      <td><strong>Date</strong></td>
+      <td>[Optional] Start time for the data query.</td>
+      <td>[optional]</td>
+    </tr>
+    <tr>
+      <td><strong>toTime</strong></td>
+      <td><strong>Date</strong></td>
+      <td>[Optional] End time for the data query.</td>
+      <td>[optional]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="return-type-3">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/EmissionsData.html"><strong>[EmissionsData]</strong></a></p>
+
+<h3 id="authorization-3">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers-3">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: Not defined</li>
+  <li><strong>Accept</strong>: application/json, application/json; charset=utf-8</li>
+</ul>
+
+<h2 id="getcurrentforecastdata">getCurrentForecastData</h2>
+
+<blockquote>
+  <p>[EmissionsForecastDTO] getCurrentForecastData(location, opts)</p>
+</blockquote>
+
+<p>Retrieves the most recent forecasted data and calculates the optimal marginal carbon intensity window.</p>
+
+<p>This endpoint fetches only the most recently generated forecast for all provided locations.  It uses the \"dataStartAt\" and   \"dataEndAt\" parameters to scope the forecasted data points (if available for those times). If no start or end time   boundaries are provided, the entire forecast dataset is used. The scoped data points are used to calculate average marginal   carbon intensities of the specified \"windowSize\" and the optimal marginal carbon intensity window is identified.                The forecast data represents what the data source predicts future marginal carbon intesity values to be,   not actual measured emissions data (as future values cannot be known).                This endpoint is useful for determining if there is a more carbon-optimal time to use electicity predicted in the future.</p>
+
+<h3 id="example-4">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonAwareApi</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">location</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">null</span><span class="dl">"</span><span class="p">];</span> <span class="c1">// [String] | String array of named locations</span>
+<span class="kd">let</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">dataStartAt</span><span class="dl">'</span><span class="p">:</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="na">T15</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span><span class="p">,</span> <span class="c1">// Date | Start time boundary of forecasted data points.Ignores current forecast data points before this time.  Defaults to the earliest time in the forecast data.</span>
+  <span class="dl">'</span><span class="s1">dataEndAt</span><span class="dl">'</span><span class="p">:</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="na">T18</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span><span class="p">,</span> <span class="c1">// Date | End time boundary of forecasted data points. Ignores current forecast data points after this time.  Defaults to the latest time in the forecast data.</span>
+  <span class="dl">'</span><span class="s1">windowSize</span><span class="dl">'</span><span class="p">:</span> <span class="mi">30</span> <span class="c1">// Number | The estimated duration (in minutes) of the workload.  Defaults to the duration of a single forecast data point.</span>
+<span class="p">};</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">getCurrentForecastData</span><span class="p">(</span><span class="nx">location</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters-4">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>location</strong></td>
+      <td><a href="String.md"><strong>[String]</strong></a></td>
+      <td>String array of named locations</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>dataStartAt</strong></td>
+      <td><strong>Date</strong></td>
+      <td>Start time boundary of forecasted data points.Ignores current forecast data points before this time.  Defaults to the earliest time in the forecast data.</td>
+      <td>[optional]</td>
+    </tr>
+    <tr>
+      <td><strong>dataEndAt</strong></td>
+      <td><strong>Date</strong></td>
+      <td>End time boundary of forecasted data points. Ignores current forecast data points after this time.  Defaults to the latest time in the forecast data.</td>
+      <td>[optional]</td>
+    </tr>
+    <tr>
+      <td><strong>windowSize</strong></td>
+      <td><strong>Number</strong></td>
+      <td>The estimated duration (in minutes) of the workload.  Defaults to the duration of a single forecast data point.</td>
+      <td>[optional]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="return-type-4">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/EmissionsForecastDTO.html"><strong>[EmissionsForecastDTO]</strong></a></p>
+
+<h3 id="authorization-4">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers-4">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: Not defined</li>
+  <li><strong>Accept</strong>: application/json, application/json; charset=utf-8</li>
+</ul>
+
+<h2 id="getemissionsdataforlocationbytime">getEmissionsDataForLocationByTime</h2>
+
+<blockquote>
+  <p>[EmissionsData] getEmissionsDataForLocationByTime(location, opts)</p>
+</blockquote>
+
+<p>Calculate the best emission data by location for a specified time period.</p>
+
+<h3 id="example-5">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonAwareApi</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">location</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">location_example</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// String | String named location.</span>
+<span class="kd">let</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">startTime</span><span class="dl">'</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="dl">"</span><span class="s2">2013-10-20T19:20:30+01:00</span><span class="dl">"</span><span class="p">),</span> <span class="c1">// Date | [Optional] Start time for the data query.</span>
+  <span class="dl">'</span><span class="s1">endTime</span><span class="dl">'</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="dl">"</span><span class="s2">2013-10-20T19:20:30+01:00</span><span class="dl">"</span><span class="p">)</span> <span class="c1">// Date | [Optional] End time for the data query.</span>
+<span class="p">};</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">getEmissionsDataForLocationByTime</span><span class="p">(</span><span class="nx">location</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters-5">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>location</strong></td>
+      <td><strong>String</strong></td>
+      <td>String named location.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>startTime</strong></td>
+      <td><strong>Date</strong></td>
+      <td>[Optional] Start time for the data query.</td>
+      <td>[optional]</td>
+    </tr>
+    <tr>
+      <td><strong>endTime</strong></td>
+      <td><strong>Date</strong></td>
+      <td>[Optional] End time for the data query.</td>
+      <td>[optional]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="return-type-5">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/EmissionsData.html"><strong>[EmissionsData]</strong></a></p>
+
+<h3 id="authorization-5">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers-5">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: Not defined</li>
+  <li><strong>Accept</strong>: application/json, application/json; charset=utf-8</li>
+</ul>
+
+<h2 id="getemissionsdataforlocationsbytime">getEmissionsDataForLocationsByTime</h2>
+
+<blockquote>
+  <p>[EmissionsData] getEmissionsDataForLocationsByTime(location, opts)</p>
+</blockquote>
+
+<p>Calculate the observed emission data by list of locations for a specified time period.</p>
+
+<h3 id="example-6">Example</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">YaSuenagCarbonAwareSdk</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@YaSuenag/carbon-aware-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">apiInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YaSuenagCarbonAwareSdk</span><span class="p">.</span><span class="nx">CarbonAwareApi</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">location</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">null</span><span class="dl">"</span><span class="p">];</span> <span class="c1">// [String] | String array of named locations</span>
+<span class="kd">let</span> <span class="nx">opts</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">time</span><span class="dl">'</span><span class="p">:</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="na">T15</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span><span class="p">,</span> <span class="c1">// Date | [Optional] Start time for the data query.</span>
+  <span class="dl">'</span><span class="s1">toTime</span><span class="dl">'</span><span class="p">:</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">01</span><span class="na">T18</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="nx">Z</span> <span class="c1">// Date | [Optional] End time for the data query.</span>
+<span class="p">};</span>
+<span class="nx">apiInstance</span><span class="p">.</span><span class="nx">getEmissionsDataForLocationsByTime</span><span class="p">(</span><span class="nx">location</span><span class="p">,</span> <span class="nx">opts</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">API called successfully. Returned data: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="parameters-6">Parameters</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>location</strong></td>
+      <td><a href="String.md"><strong>[String]</strong></a></td>
+      <td>String array of named locations</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><strong>time</strong></td>
+      <td><strong>Date</strong></td>
+      <td>[Optional] Start time for the data query.</td>
+      <td>[optional]</td>
+    </tr>
+    <tr>
+      <td><strong>toTime</strong></td>
+      <td><strong>Date</strong></td>
+      <td>[Optional] End time for the data query.</td>
+      <td>[optional]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="return-type-6">Return type</h3>
+
+<p><a href="/carbon-aware-sdk/docs/EmissionsData.html"><strong>[EmissionsData]</strong></a></p>
+
+<h3 id="authorization-6">Authorization</h3>
+
+<p>No authorization required</p>
+
+<h3 id="http-request-headers-6">HTTP request headers</h3>
+
+<ul>
+  <li><strong>Content-Type</strong>: Not defined</li>
+  <li><strong>Accept</strong>: application/json, application/json; charset=utf-8</li>
+</ul>
+
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>
