@@ -59,7 +59,7 @@ jobs:
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./_doc_src
-          destination: ./pages/js
+          destination: ./doc/js
       - name: Upload documents
         uses: actions/upload-artifact@v3
         with:
