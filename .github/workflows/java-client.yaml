@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Prepare
         run: |
-          mkdir work pages
+          mkdir work doc
           npm install -g @openapitools/openapi-generator-cli@2.5.2
       - name: Download OpenAPI spec
         uses: actions/download-artifact@v3
@@ -51,12 +51,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         working-directory: work
       - name: Prepare to upload Javadoc
-        run: |
-          mkdir -p pages/java
-          mv work/target/apidocs pages/java/${{ inputs.version }}
+        run: mv work/target/apidocs doc/java
         shell: bash
       - name: Upload Javadoc
         uses: actions/upload-artifact@v3
         with:
           name: javadoc
-          path: pages
+          path: doc

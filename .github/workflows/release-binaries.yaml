@@ -104,6 +104,10 @@ jobs:
           path: docs/apidocs/${{ github.ref_name }}
       - name: Push documents
         run: |
+          git config --global user.name "Green-Software-Foundation"
+          git config --global user.email "Green-Software-Foundation@users.noreply.github.com"
           git add docs/apidocs/${{ github.ref_name }}
           git commit -m "Add client API docs for ${{ github.ref_name }}"
           git push origin doc-website
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

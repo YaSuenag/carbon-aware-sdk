@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Prepare
         run: |
-          mkdir work pages
+          mkdir work doc
           npm install -g @openapitools/openapi-generator-cli@2.5.2
       - name: Download OpenAPI spec
         uses: actions/download-artifact@v3
@@ -50,7 +50,7 @@ jobs:
         working-directory: work
       - name: Prepare to upload API documents
         run: |
-          mkdir -p pages/js/${{ inputs.version }}
+          mkdir -p doc/js
           mkdir _doc_src
           mv work/README.md _doc_src/
           mv work/docs _doc_src/
@@ -59,9 +59,9 @@ jobs:
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./_doc_src
-          destination: ./pages/js/${{ inputs.version }}
+          destination: ./pages/js
       - name: Upload documents
         uses: actions/upload-artifact@v3
         with:
           name: js-documents
-          path: pages
+          path: doc
