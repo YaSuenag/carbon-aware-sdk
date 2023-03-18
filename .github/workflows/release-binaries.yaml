@@ -85,6 +85,8 @@ jobs:
   upload-apidoc:
     needs: [publish-java-client, publish-js-client]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout doc-website branch
         uses: actions/checkout@v3
