@@ -51,9 +51,15 @@ jobs:
       - name: Prepare to upload API documents
         run: |
           mkdir -p pages/js/${{ inputs.version }}
-          mv work/README.md pages/js/${{ inputs.version }}
-          mv work/docs pages/js/${{ inputs.version }}/
+          mkdir _doc_src
+          mv work/README.md _doc_src/
+          mv work/docs _doc_src/
         shell: bash
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./_doc_src
+          destination: ./pages/js/${{ inputs.version }}
       - name: Upload documents
         uses: actions/upload-artifact@v3
         with:
