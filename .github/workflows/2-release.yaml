@@ -31,9 +31,7 @@ jobs:
       - name: Check pre-release
         run: |
           $IS_LATEST = (!$${{ github.event.release.prerelease }}).ToString().ToLower()
-          echo "IS_LATEST=$IS_LATEST"
           "IS_LATEST=$IS_LATEST" >> $env:GITHUB_ENV
-          cat $env:GITHUB_ENV
         shell: pwsh
       - name: Extract metadata (tags, labels) for Docker
         id: meta
