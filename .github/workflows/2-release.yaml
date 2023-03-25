@@ -28,12 +28,17 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ github.token }}
+      - name: Check pre-release
+        run: |
+          $IS_LATEST = ${{ github.event.release.prerelease }} -eq "true" ? "false" : "true"
+          "IS_LATEST=$IS_LATEST" >> $env:GITHUB_ENV
+        shell: pwsh
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4.3.0
         with:
           tags: type=raw,value=${{ github.ref_name }}
-          flavor: latest=true
+          flavor: latest=${{ env.IS_LATEST }}
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
