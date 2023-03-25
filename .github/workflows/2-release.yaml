@@ -31,14 +31,18 @@ jobs:
       - name: Check pre-release
         run: |
           $IS_LATEST = (!$${{ github.event.release.prerelease }}).ToString().ToLower()
+          $FLAVOR_PREFIX = $${{ github.event.release.prerelease }}) ? "pre" : ""
           "IS_LATEST=$IS_LATEST" >> $env:GITHUB_ENV
+          "FLAVOR_PREFIX=$FLAVOR_PREFIX" >> $env:GITHUB_ENV
         shell: pwsh
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4.3.0
         with:
           tags: type=raw,value=${{ github.ref_name }}
-          flavor: latest=${{ env.IS_LATEST }}
+          flavor: |
+            latest=${{ env.IS_LATEST }}
+            prefix=${{ env.FLAVOR_PREFIX }}
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
