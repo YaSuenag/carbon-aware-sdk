@@ -30,7 +30,7 @@ jobs:
           password: ${{ github.token }}
       - name: Check pre-release
         run: |
-          $IS_LATEST = (![System.Convert]::ToBoolean(${{ github.event.release.prerelease }})).ToString().ToLower()
+          $IS_LATEST = (!$${{ github.event.release.prerelease }}).ToString().ToLower()
           echo "IS_LATEST=$IS_LATEST"
           "IS_LATEST=$IS_LATEST" >> $env:GITHUB_ENV
           cat $env:GITHUB_ENV
