@@ -31,7 +31,7 @@ jobs:
       - name: Check pre-release
         run: |
           $IS_LATEST = (!$${{ github.event.release.prerelease }}).ToString().ToLower()
-          $FLAVOR_PREFIX = $${{ github.event.release.prerelease }}) ? "pre" : ""
+          $FLAVOR_PREFIX = $${{ github.event.release.prerelease }} ? "pre" : ""
           "IS_LATEST=$IS_LATEST" >> $env:GITHUB_ENV
           "FLAVOR_PREFIX=$FLAVOR_PREFIX" >> $env:GITHUB_ENV
         shell: pwsh
