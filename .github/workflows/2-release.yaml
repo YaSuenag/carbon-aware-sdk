@@ -19,7 +19,9 @@ jobs:
       packages: write
     steps:
       - name: Dump event data
-        run: echo ${{ github.event }}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
