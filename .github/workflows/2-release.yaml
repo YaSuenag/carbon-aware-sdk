@@ -31,7 +31,7 @@ jobs:
       - name: Check pre-release
         run: |
           $IS_LATEST = ${{ github.event.release.prerelease }} -eq "true" ? "false" : "true"
-          "IS_LATEST=$IS_LATEST" >> $env:GITHUB_ENV
+          Add-Content -Path $env:GITHUB_ENV -Value "IS_LATEST=$IS_LATEST"
         shell: pwsh
       - name: Extract metadata (tags, labels) for Docker
         id: meta
