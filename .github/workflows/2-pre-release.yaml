@@ -52,6 +52,7 @@ jobs:
         run: |
           CONTEXT=user
           REPO=carbon-aware-sdk
+          ORG_OR_USER_NAME=yasuenag
 
           JSON=`curl -sL -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ github.token }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/$CONTEXT/packages/container/$REPO/versions`
           TAGS=(`echo "$JSON" | jq -r "[.[] | select((.metadata.container.tags | length) > 0)] | sort_by(.created_at) | .[0:${{ env.NUM_KEEP_IMAGES }}] | .[].metadata.container.tags[0]"`)
