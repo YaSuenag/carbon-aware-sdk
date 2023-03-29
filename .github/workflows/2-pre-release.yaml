@@ -55,8 +55,8 @@ jobs:
           ORG_OR_USER_NAME=yasuenag
 
           JSON=`curl -sL -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ github.token }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/$CONTEXT/packages/container/$REPO/versions`
-          TAGS=(`echo "$JSON" | jq -r "[.[] | select((.metadata.container.tags | length) > 0)] | sort_by(.created_at) | .[0:${{ env.NUM_KEEP_IMAGES }}] | .[].metadata.container.tags[0]"`)
-          for TAG in "${TAGS[@]}"; do
+          TAGS=(`echo "$JSON" | jq -r '[.[] | select((.metadata.container.tags | length) > 0)] | sort_by(.created_at) | reverse | .[].metadata.container.tags[0] | select(startswith("sha-"))'`)
+          for TAG in "${TAGS[@]:${{ env.NUM_KEEP_IMAGES }}}"; do
             PARENT_SHA=`echo "$JSON" | jq -r ".[] | select(.metadata.container.tags | contains([\"$TAG\"])) | .name"`
             PARENT_ID=`echo "$JSON" | jq -r ".[] | select(.name == \"$PARENT_SHA\") | .id"`
             echo "$PARENT_ID" >> stale-images.txt
