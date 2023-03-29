@@ -59,7 +59,7 @@ jobs:
             PARENT_SHA=`echo "$JSON" | jq -r ".[] | select(.metadata.container.tags | contains([\"$TAG\"])) | .name"`
             PARENT_ID=`echo "$JSON" | jq -r ".[] | select(.name == \"$PARENT_SHA\") | .id"`
             echo "$PARENT_ID" >> stale-images.txt
-            PLATFORM_SHAS=(`podman manifest inspect ghcr.io/$ORG_OR_USER_NAME/$REPO@$PARENT_SHA | jq -r '.manifests[].digest'`)
+            PLATFORM_SHAS=(`docker manifest inspect ghcr.io/$ORG_OR_USER_NAME/$REPO@$PARENT_SHA | jq -r '.manifests[].digest'`)
             for SHA in "${PLATFORM_SHAS[@]}"; do
               CHILD_ID=`echo "$JSON" | jq -r ".[] | select(.name == \"$SHA\") | .id"`
               echo "$CHILD_ID" >> stale-images.txt
