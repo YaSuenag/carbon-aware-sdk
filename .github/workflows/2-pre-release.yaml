@@ -67,7 +67,7 @@ jobs:
           $versions |
               Where-Object {$_.metadata.container.tags.Where({$_.StartsWith("sha-")}, "First").Count -gt 0} |
               Sort-Object -Property created_at -Descending |
-              Select-Object -Skip ${{ env.NUM_KEEP_IMAGES }}} |
+              Select-Object -Skip ${{ env.NUM_KEEP_IMAGES }} |
               ForEach-Object {[void]$digests.add($_.name)}
 
           # Pick up digest of children tagged images which should be removed
