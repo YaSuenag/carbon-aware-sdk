@@ -82,7 +82,7 @@ jobs:
 
           # Retrieve IDs to be removed
           $ids = $versions |
-              Where-Object {!$digests.Contains($_.name)} |
+              Where-Object {$digests.Contains($_.name)} |
               Select-Object -ExpandProperty id
 
           $remove_images = $ids -join ","
