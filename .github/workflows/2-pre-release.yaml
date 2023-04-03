@@ -71,12 +71,14 @@ jobs:
               ForEach-Object {[void]$digests.add($_.name)}
 
           # Pick up digest of children tagged images which should be removed
-          [System.Collections.Immutable.ImmutableHashSet]::Create($digests) |
+          $immutable_digests = New-Object System.Collections.Generic.HashSet[string]($digests)
+          $immutable_digests | ForEach-Object {
               docker manifest inspect ${{ env.REGISTRY }}/$image_lower@$_ |
               Out-String |
               ConvertFrom-Json |
               Select-Object -ExpandProperty "manifests" |
               ForEach-Object {[void]$digests.Add($_.digest)}
+          }
 
           $remove_images = $ids -join ","
           "REMOVE_IMAGES=$remove_images" >> $env:GITHUB_OUTPUT
