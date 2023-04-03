@@ -10,7 +10,6 @@ env:
   PACKAGE_REPO: carbon-aware-sdk
   IMAGE_NAME: ${{ github.repository }}
   NUM_KEEP_IMAGES: 3
-  ACTIONS_STEP_DEBUG: true
 
 concurrency:
   group: publish
@@ -81,7 +80,7 @@ jobs:
               ForEach-Object {[void]$digests.Add($_.digest)}
           }
 
-          $remove_images = $ids -join ","
+          $remove_images = $digests -join ","
           "REMOVE_IMAGES=$remove_images" >> $env:GITHUB_OUTPUT
         shell: pwsh
       - name: Remove stale packages
