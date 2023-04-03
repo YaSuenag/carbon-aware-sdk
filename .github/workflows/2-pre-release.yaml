@@ -10,6 +10,7 @@ env:
   PACKAGE_REPO: carbon-aware-sdk
   IMAGE_NAME: ${{ github.repository }}
   NUM_KEEP_IMAGES: 3
+  ACTIONS_STEP_DEBUG: true
 
 concurrency:
   group: publish
