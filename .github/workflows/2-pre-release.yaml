@@ -80,7 +80,12 @@ jobs:
               ForEach-Object {[void]$digests.Add($_.digest)}
           }
 
-          $remove_images = $digests -join ","
+          # Retrieve IDs to be removed
+          $ids = $versions |
+              Where-Object {!$digests.Contains($_.name)} |
+              Select-Object -ExpandProperty id
+
+          $remove_images = $ids -join ","
           "REMOVE_IMAGES=$remove_images" >> $env:GITHUB_OUTPUT
         shell: pwsh
       - name: Remove stale packages
