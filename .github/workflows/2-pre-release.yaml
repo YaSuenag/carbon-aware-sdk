@@ -70,7 +70,7 @@ jobs:
               Where-Object {$_.metadata.container.tags.Where({$_.StartsWith("sha-")}, "First").Count -gt 0} |
               Sort-Object -Property created_at -Descending |
               Select-Object -Skip ${{ env.NUM_KEEP_IMAGES }} |
-              ForEach-Object {[void]$digests.add($_.name)}
+              ForEach-Object {[void]$digests.add($_.digest)}
 
           # Pick up digest of children tagged images which should be removed
           [System.Collections.Immutable.ImmutableHashSet]::Create($digests) |
