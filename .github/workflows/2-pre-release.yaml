@@ -55,8 +55,6 @@ jobs:
         id: list-older-images
         run: |
           $image_lower = "${{ env.IMAGE_NAME }}".ToLower()
-          Write-Output "DEBUG"
-          Write-Output $image_lower
 
           # Retrieve information of all of container images
           $headers = @{"Authorization" = "Bearer ${{ github.token }}";
@@ -65,8 +63,6 @@ jobs:
           #$versions = Invoke-WebRequest -Headers $headers https://api.github.com/orgs/${{ github.repository_owner }}/packages/container/${{ env.PACKAGE_NAME }}/versions |
           $versions = Invoke-WebRequest -Headers $headers https://api.github.com/user/packages/container/${{ env.PACKAGE_NAME }}/versions |
               ConvertFrom-Json
-          Write-Output "Debug1"
-          Write-Output $versions
 
           $digests = New-Object System.Collections.Generic.HashSet[string]
           # Pick up digest of tagged images which should be removed
@@ -75,12 +71,10 @@ jobs:
               Sort-Object -Property created_at -Descending |
               Select-Object -Skip ${{ env.NUM_KEEP_IMAGES }} |
               ForEach-Object {[void]$digests.add($_.name)}
-          Write-Output "Debug2"
-          Write-Output $digests
 
           # Pick up digest of children tagged images which should be removed
           [System.Collections.Immutable.ImmutableHashSet]::Create($digests) |
-              docker manifest inspect ${{ env.REGISTRY }}/$image_lower@$_ |
+              echo "docker manifest inspect ${{ env.REGISTRY }}/$image_lower@$_" |
               Out-String |
               ConvertFrom-Json |
               Select-Object -ExpandProperty "manifests" |
