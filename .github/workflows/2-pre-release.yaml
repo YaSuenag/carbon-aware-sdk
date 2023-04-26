@@ -55,6 +55,8 @@ jobs:
         id: list-older-images
         run: |
           $image_lower = "${{ env.IMAGE_NAME }}".ToLower()
+          Write-Output "DEBUG"
+          Write-Output $image_lower
 
           # Retrieve information of all of container images
           $headers = @{"Authorization" = "Bearer ${{ github.token }}";
@@ -72,7 +74,7 @@ jobs:
               Where-Object {$_.metadata.container.tags.Where({$_.StartsWith("sha-")}, "First").Count -gt 0} |
               Sort-Object -Property created_at -Descending |
               Select-Object -Skip ${{ env.NUM_KEEP_IMAGES }} |
-              ForEach-Object {[void]$digests.add($_.digest)}
+              ForEach-Object {[void]$digests.add($_.name)}
           Write-Output "Debug2"
           Write-Output $digests
 
