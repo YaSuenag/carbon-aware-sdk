@@ -63,6 +63,8 @@ jobs:
           #$versions = Invoke-WebRequest -Headers $headers https://api.github.com/orgs/${{ github.repository_owner }}/packages/container/${{ env.PACKAGE_NAME }}/versions |
           $versions = Invoke-WebRequest -Headers $headers https://api.github.com/user/packages/container/${{ env.PACKAGE_NAME }}/versions |
               ConvertFrom-Json
+          Write-Output "Debug1"
+          Write-Output $versions
 
           $digests = New-Object System.Collections.Generic.HashSet[string]
           # Pick up digest of tagged images which should be removed
@@ -71,6 +73,8 @@ jobs:
               Sort-Object -Property created_at -Descending |
               Select-Object -Skip ${{ env.NUM_KEEP_IMAGES }} |
               ForEach-Object {[void]$digests.add($_.digest)}
+          Write-Output "Debug2"
+          Write-Output $digests
 
           # Pick up digest of children tagged images which should be removed
           [System.Collections.Immutable.ImmutableHashSet]::Create($digests) |
