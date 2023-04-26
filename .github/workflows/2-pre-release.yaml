@@ -73,7 +73,9 @@ jobs:
               ForEach-Object {[void]$digests.add($_.name)}
 
           # Pick up digest of children tagged images which should be removed
-          [System.Collections.Immutable.ImmutableHashSet]::Create($digests) |
+          $immutable_digests = [System.Collections.Immutable.ImmutableHashSet]::Create($digests)
+          Write-Output $immutable_digests
+          $immutable_digests |
               docker manifest inspect "${{ env.REGISTRY }}/$image_lower@$_" |
               Out-String |
               ConvertFrom-Json |
