@@ -74,7 +74,7 @@ jobs:
 
           # Pick up digest of children tagged images which should be removed
           [System.Collections.Immutable.ImmutableHashSet]::Create($digests) |
-              echo "docker manifest inspect ${{ env.REGISTRY }}/$image_lower@$_" |
+              docker manifest inspect "${{ env.REGISTRY }}/$image_lower@$_" |
               Out-String |
               ConvertFrom-Json |
               Select-Object -ExpandProperty "manifests" |
