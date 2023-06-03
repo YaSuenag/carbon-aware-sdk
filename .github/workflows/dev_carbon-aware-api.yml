@@ -7,11 +7,12 @@ on:
   push:
     branches:
       - dev
+      - pr/work/skip-workflow
   workflow_dispatch:
 
 jobs:
   build:
-    if: github.repository == 'Green-Software-Foundation/carbon-aware-sdk'
+    if: github.repository == 'Green-Software-Foundation/carbon-aware-sdk' || vars.ENABLE_WEBAPP_WORKFLOW == 'true'
     runs-on: windows-latest
 
     steps:

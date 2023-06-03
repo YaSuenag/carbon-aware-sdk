@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - pr/work/skip-workflow
   workflow_dispatch:
 
 env:
@@ -18,7 +19,7 @@ concurrency:
 
 jobs:
   publish-container-image:
-    if: github.repository == 'Green-Software-Foundation/carbon-aware-sdk'
+    if: github.repository == 'Green-Software-Foundation/carbon-aware-sdk' || vars.ENABLE_PRERELEASE_WORKFLOW == 'true'
     runs-on: ubuntu-latest
     permissions:
       packages: write
