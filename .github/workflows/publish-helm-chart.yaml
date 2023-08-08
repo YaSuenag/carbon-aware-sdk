@@ -9,6 +9,7 @@ concurrency:
 
 jobs:
   push-helm-charts:
+    if: github.repository == 'Green-Software-Foundation/carbon-aware-sdk' || vars.ENABLE_HELM_WORKFLOW == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,5 +36,5 @@ jobs:
 
       - name: Push charts to GHCR
         run: |
-          helm push carbon-aware-sdk-${{ env.CHART_VERSION  }}.tgz "oci://ghcr.io/yasuenag/charts"
+          helm push carbon-aware-sdk-${{ env.CHART_VERSION  }}.tgz "oci://ghcr.io/green-software-foundation/charts"
         shell: bash
