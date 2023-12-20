@@ -120,6 +120,46 @@ class LocationSourceTest
         AssertLocationsEqual(Constants.LocationWestUs, westResult);
     }
 
+    [Test]
+    public async Task GeopositionLocation_ValidLocation_With_SameMultiConfiguration()
+    {
+        var configuration = new LocationDataSourcesConfiguration();
+        configuration.LocationSourceFiles.Add(new LocationSourceFile
+        {
+            Prefix = "prefix",
+            Delimiter = "-",
+            DataFileLocation = _goodFile
+        });
+        configuration.LocationSourceFiles.Add(new LocationSourceFile
+        {
+            Prefix = "prefix",
+            Delimiter = "-",
+            DataFileLocation = _goodFile
+        });
+        var options = new Mock<IOptionsMonitor<LocationDataSourcesConfiguration>>();
+        options.Setup(o => o.CurrentValue).Returns(() => configuration);
+        var logger = Mock.Of<ILogger<LocationSource>>();
+        var locationSource = new LocationSource(logger, options.Object);
+
+        Location inputLocation = new Location
+        {
+            Name = "prefix-test-eastus"
+        };
+
+        var result = await locationSource.ToGeopositionLocationAsync(inputLocation);
+        AssertLocationsEqual(Constants.LocationEastUs, result);
+
+        inputLocation = new Location
+        {
+            Name = "prefix_test-eastus_1" // generated key when the key is duplicated
+        };
+
+        Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await locationSource.ToGeopositionLocationAsync(inputLocation);
+        });
+    }
+
     [TestCase("prefix-test-eastus", TestName = "ValidLocation_CaseInsensitive: exact match case")]
     [TestCase("PrEfIx-test-eastus", TestName = "ValidLocation_CaseInsensitive: prefix case insensitive")]
     [TestCase("prefix-teST-EAstus", TestName = "ValidLocation_CaseInsensitive: location name case insensitive")]

@@ -57,6 +57,7 @@ internal class LocationSource : ILocationSource
     {
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
         var keyCounter = new Dictionary<string, int>(); // used to keep track of key dups
+        var processedFiles = new HashSet<string>(); // used to keep name of processed files
 
         var sourceFiles = !_configuration.LocationSourceFiles.Any() ? DiscoverFiles() : _configuration.LocationSourceFiles;
         foreach (var source in sourceFiles)
@@ -68,8 +69,9 @@ internal class LocationSource : ILocationSource
                 var geoInstance = namedGeoMap[locationKey];
                 geoInstance.AssertValid();
                 var key = BuildKey(source, locationKey);
-                AddToLocationMap(key, geoInstance, source.DataFileLocation, keyCounter);
+                AddToLocationMap(key, geoInstance, source.DataFileLocation, keyCounter, processedFiles);
             }
+            processedFiles.Add(source.DataFileLocation);
         }
     }
 
@@ -112,13 +114,18 @@ internal class LocationSource : ILocationSource
         return files.Select(x => x.Substring(pathCombined.Length + 1)).Select(n => new LocationSourceFile { DataFileLocation = n });
     }
 
-    private void AddToLocationMap(string key, NamedGeoposition data, string sourceFile, Dictionary<string, int> keyCounter)
+    private void AddToLocationMap(string key, NamedGeoposition data, string sourceFile, Dictionary<string, int> keyCounter, HashSet<string> processedFiles)
     {
         var loc = (Location) data;
         
         if (_allLocations.TryAdd(key, loc))
         {
             keyCounter.Add(key, 0);
+            return;
+        }
+        if (processedFiles.Contains(sourceFile))
+        {
+            // We can ignore because same location from same file is already added.
             return;
         }
         // Generate new key using keyCounter counter
