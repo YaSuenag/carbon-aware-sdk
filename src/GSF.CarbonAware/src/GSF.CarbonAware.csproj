@@ -54,4 +54,8 @@
   <ItemGroup Label="IncludeSymbols" Condition="$(IncludeSymbols) == true">
     <Content Include="$(TargetDir)/CarbonAware*.pdb" Pack="true" PackagePath="lib/net6.0/" />
   </ItemGroup>
+
+  <Target Name="CreateDatasourceDirectory" AfterTargets="Build">
+    <MakeDir Directories="$(TargetDir)\data-sources\json,$(TargetDir)\location-sources\json" />
+  </Target>
 </Project>
