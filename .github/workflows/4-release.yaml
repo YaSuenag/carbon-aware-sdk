@@ -64,7 +64,7 @@ jobs:
     needs:
       - detect-current-api-version
       - detect-newer-api-version
-    if: ${{ needs.detect-current-api-version.outputs.apiver }} != ${{ needs.detect-newer-api-version.outputs.apiver }}
+    if: ${{ needs.detect-current-api-version.outputs.apiver != needs.detect-newer-api-version.outputs.apiver }}
     uses: ./.github/workflows/generate-webapi-clients.yaml
     permissions:
       contents: write
