@@ -67,5 +67,7 @@ jobs:
     if: ${{ needs.detect-current-api-version.outputs.apiver }} != ${{ needs.detect-newer-api-version.outputs.apiver }}
     uses: ./.github/workflows/generate-webapi-clients.yaml
     with:
-      registry: ${{ env.REGISTRY }}
-      image-repo: ${{ env.IMAGE_NAME }}
+      # We cannot use environment variables here due to workflow limitation.
+      # https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/reusing-workflows#limitations
+      registry: ghcr.io
+      image-repo: ${{ github.repository }}
