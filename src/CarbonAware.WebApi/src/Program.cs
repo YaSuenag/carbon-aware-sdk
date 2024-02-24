@@ -12,7 +12,7 @@ using System.Reflection;
 
 // Define constants to initialize tracing with
 var serviceName = "CarbonAware.WebAPI";
-var serviceVersion = "1.0.0";
+var serviceVersion = "1.0.1";
 
 var builder = WebApplication.CreateBuilder(args);
 
