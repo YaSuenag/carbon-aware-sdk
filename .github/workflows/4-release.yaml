@@ -12,8 +12,10 @@ jobs:
   detect-current-api-version:
     uses: ./.github/workflows/detect-webapi-version.yaml
     with:
-      registry: ${{ env.REGISTRY }}
-      image-repo: ${{ env.IMAGE_NAME }}
+      # We cannot use environment variables here due to workflow limitation.
+      # https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/reusing-workflows#limitations
+      registry: ghcr.io
+      image-repo: ${{ github.repository }}
 
   publish-container-image:
     runs-on: ubuntu-latest
@@ -53,8 +55,10 @@ jobs:
     needs: publish-container-image
     uses: ./.github/workflows/detect-webapi-version.yaml
     with:
-      registry: ${{ env.REGISTRY }}
-      image-repo: ${{ env.IMAGE_NAME }}
+      # We cannot use environment variables here due to workflow limitation.
+      # https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/reusing-workflows#limitations
+      registry: ghcr.io
+      image-repo: ${{ github.repository }}
 
   generate-webapi-clients:
     needs:
