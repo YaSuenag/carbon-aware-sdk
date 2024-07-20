@@ -6,7 +6,7 @@ sidebar_position: 10
 
 This chapter shows the hint of troubleshooting if you face trouble(s) when you use Carbon Aware SDK.
 
-- [System.IO.IOException caused by number of inotify instances](#using-the-cli)
+- [System.IO.IOException caused by number of inotify instances](#systemioioexception-caused-by-number-of-inotify-instances)
 
 ## System.IO.IOException caused by number of inotify instances
 
