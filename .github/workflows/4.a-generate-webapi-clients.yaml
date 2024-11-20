@@ -46,3 +46,10 @@ jobs:
     with:
       image: ${{ needs.detect-api-version.outputs.image }}
       apiver: ${{ needs.detect-api-version.outputs.apiver }}
+
+  generate-npm-client:
+    needs: detect-api-version
+    uses: ./.github/workflows/4.a.1-generate-webapi-client-npm.yaml
+    with:
+      image: ${{ needs.detect-api-version.outputs.image }}
+      apiver: ${{ needs.detect-api-version.outputs.apiver }}
