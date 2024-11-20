@@ -39,9 +39,9 @@ jobs:
           npm install -g @openapitools/openapi-generator-cli@2.5.2
       - name: Generate client library
         run: |
-          echo '{"npmName": "@${{ github.repository_owner }}/casdk-client", "npmVersion": "${{ inputs.apiver  }}", "licenseName": "MIT", "gitUserId": "${{ github.repository_owner }}", "gitRepoId": "' > config.json
-          echo "${{ github.repository  }}" | cut -d / -f 2 >> config.json
-          echo '", "npmRepository": "https://npm.pkg.github.com"}' >> config.json
+          echo -n '{"npmName": "@${{ github.repository_owner }}/casdk-client", "npmVersion": "${{ inputs.apiver  }}", "licenseName": "MIT", "gitUserId": "${{ github.repository_owner }}", "gitRepoId": "' > config.json
+          echo -n "${{ github.repository  }}" | sed -e 's|^.\+/||' >> config.json
+          echo -n '", "npmRepository": "https://npm.pkg.github.com"}' >> config.json
           openapi-generator-cli generate -i ${{ env.API }} -g typescript-axios -o work -c config.json
         shell: bash
       - name: Publish NPM library
