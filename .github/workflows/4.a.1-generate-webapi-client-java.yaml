@@ -69,6 +69,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: HEAD
       - name: Prepare
         run: mkdir -p ${{ env.DOCPATH }}
       - name: Download Javadoc
