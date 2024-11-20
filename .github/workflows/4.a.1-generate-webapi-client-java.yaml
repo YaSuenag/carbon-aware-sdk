@@ -57,7 +57,8 @@ jobs:
 
   push-javadoc:
     needs: generate-java-client
-    concurrency: push-to-doc-website
+    concurrency:
+      group: push-to-doc-website
     runs-on: ubuntu-latest
     env:
       DOCPATH: casdk-docs/static/client-apidocs/${{ inputs.apiver }}/java
