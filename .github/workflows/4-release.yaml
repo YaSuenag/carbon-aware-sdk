@@ -72,3 +72,4 @@ jobs:
       # https://docs.github.com/en/enterprise-cloud@latest/actions/using-workflows/reusing-workflows#limitations
       registry: ghcr.io
       image-repo: ${{ github.repository }}
+      branch: main  # Every releases should be happened on main branch.

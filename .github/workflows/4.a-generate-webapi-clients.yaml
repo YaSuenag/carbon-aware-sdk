@@ -13,6 +13,9 @@ on:
         type: string
         required: false
         default: latest
+      branch:
+        type: string
+        required: true
   workflow_dispatch:
     inputs:
       registry:
@@ -27,6 +30,10 @@ on:
         type: string
         required: false
         default: latest
+      branch:
+        type: string
+        required: true
+        default: dev
 
 permissions:
   contents: write
@@ -46,6 +53,7 @@ jobs:
     with:
       image: ${{ needs.detect-api-version.outputs.image }}
       apiver: ${{ needs.detect-api-version.outputs.apiver }}
+      ref: ${{ inputs.branch }}
 
   generate-npm-client:
     needs: detect-api-version
@@ -53,3 +61,4 @@ jobs:
     with:
       image: ${{ needs.detect-api-version.outputs.image }}
       apiver: ${{ needs.detect-api-version.outputs.apiver }}
+      ref: ${{ inputs.branch }}
