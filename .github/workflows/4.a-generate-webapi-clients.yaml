@@ -13,9 +13,6 @@ on:
         type: string
         required: false
         default: latest
-      branch:
-        type: string
-        required: true
   workflow_dispatch:
     inputs:
       registry:
@@ -30,14 +27,11 @@ on:
         type: string
         required: false
         default: latest
-      branch:
-        type: string
-        required: true
-        default: dev
 
 permissions:
   contents: write
   packages: write
+  pull-requests: write
 
 jobs:
   detect-api-version:
@@ -53,7 +47,6 @@ jobs:
     with:
       image: ${{ needs.detect-api-version.outputs.image }}
       apiver: ${{ needs.detect-api-version.outputs.apiver }}
-      ref: ${{ inputs.branch }}
 
   generate-npm-client:
     needs: detect-api-version
@@ -61,4 +54,34 @@ jobs:
     with:
       image: ${{ needs.detect-api-version.outputs.image }}
       apiver: ${{ needs.detect-api-version.outputs.apiver }}
-      ref: ${{ inputs.branch }}
+
+  push-apidocs:
+    needs:
+      - generate-java-client
+      - generate-npm-client
+    env:
+      DOCPATH: casdk-docs/static/client-apidocs/${{ needs.detect-api-version.outputs.apiver }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+      - name: Extract Javadoc
+        uses: actions/download-artifact@v4
+        with:
+          name: javadoc
+          path: ${{ env.DOCPATH }}/java
+      - name: Extract TypeDoc
+        uses: actions/download-artifact@v4
+        with:
+          name: typedoc
+          path: ${{ env.DOCPATH }}/npm
+      - name: Create PR for Client API docs
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "Add Client API documents for WebAPI ${{ needs.detect-api-version.outputs.apiver }}"
+          branch: gha/pr/webapidoc-${{ needs.detect-api-version.outputs.apiver }}
+          delete-branch: true
+          title: "Add Client API documents for WebAPI ${{ needs.detect-api-version.outputs.apiver }}"
+          body: |
+            This PR has been created by 4.a-generate-webapi-clients.yaml due to WebAPI version update.

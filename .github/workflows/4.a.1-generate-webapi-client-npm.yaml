@@ -66,37 +66,3 @@ jobs:
         with:
           name: typedoc
           path: docs
-
-  push-typedoc:
-    needs: generate-npm-client
-    concurrency:
-      group: push-to-doc-website
-    runs-on: ubuntu-latest
-    env:
-      DOCPATH: casdk-docs/static/client-apidocs/${{ inputs.apiver }}/npm
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ inputs.ref }}
-      - name: Checkout the latest commit
-        run: git checkout ${{ inputs.ref }}
-      - name: Prepare
-        run: mkdir -p ${{ env.DOCPATH }}
-      - name: Download TypeDoc
-        uses: actions/download-artifact@v4
-        with:
-          name: typedoc
-          path: ${{ env.DOCPATH }}
-      - name: Push TypeDoc
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ${{ env.DOCPATH }}
-          git commit -m "Add TypeDoc for WebAPI ${{ inputs.apiver }}"
-          git push origin ${{ inputs.ref }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
