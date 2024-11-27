@@ -9,9 +9,6 @@ on:
       apiver:
         required: true
         type: string
-      ref:
-        required: true
-        type: string
 
 jobs:
   generate-npm-client:
